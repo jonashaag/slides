@@ -97,18 +97,18 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('keyup', function(event) {
     if(config.keys.first.contains(event.keyCode)) {
       firstSlide();
-      return;
+      return false;
     }
     if(config.keys.next.contains(event.keyCode)) {
       nextSlide();
     } else if(config.keys.previous.contains(event.keyCode)) {
       previousSlide();
-      if(!slides.hasPrevious()) return;
+      if(!slides.hasPrevious()) return false;
     } else {
       return;
     }
     setTimeout(function() {
       slideNumbers.forEach(function(elem) { elem.innerHTML = slides.current })
     }, slides.current == 1 ? 0 : 300);
-  });
-});
+  }, false);
+}, false);
