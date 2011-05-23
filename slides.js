@@ -38,12 +38,17 @@ var config = {
 
 document.addEventListener('DOMContentLoaded', function() {
   var slides = document.getElementsByTagName('section').toArray();
+  var slideNumbers = document.getElementsByClassName('slide-number').toArray();
+
   slides.current = 0;
   slides.hasNext = function() { return this.current < slides.length-1 }
   slides.hasPrevious = function() { return this.current }
   
   slides[0].addClass('current');
   slides[1].addClass('next');
+
+  document.getElementsByClassName('slide-count').toArray()
+    .forEach(function(elem) { elem.innerHTML = slides.length-1 });
 
   var nextSlide = function() {
     if(slides.hasNext()) {
@@ -82,11 +87,14 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('keyup', function(event) {
     if(config.keys.next.contains(event.keyCode)) {
       nextSlide();
-      return false;
-    }
-    if(config.keys.previous.contains(event.keyCode)) {
+    } else if(config.keys.previous.contains(event.keyCode)) {
       previousSlide();
-      return false;
+      if(!slides.hasPrevious()) return;
+    } else {
+      return;
     }
+    setTimeout(function() {
+      slideNumbers.forEach(function(elem) { elem.innerHTML = slides.current })
+    }, slides.current == 1 ? 0 : 300);
   });
 });

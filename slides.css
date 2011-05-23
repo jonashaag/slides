@@ -17,6 +17,7 @@ section {
   -webkit-transition-duration: 1s;
   -moz-transition-duration: 1s;
   -o-transition-duration: 1s;
+  -webkit-transition-timing-function: ease;
 }
 
 .current  { left: 0; }
@@ -46,5 +47,18 @@ h1 {
   font-weight: normal;
 }
 
+header, footer {
+  position: absolute;
+  width: 100%;
+  font-size: 10pt;
+  color: #aaa;
+}
+header > *, footer > * { padding: 10px; }
+footer { bottom: 0; }
+
+.floatleft { float: left; }
+.floatright { float: right; }
+
 /* First slide */
-section:first-child h1 { font-size: 40pt; padding-top: 2em; }
+section#welcome { z-index: 2; background-color: white; }
+section#welcome h1 { font-size: 40pt; padding-top: 2em; }
