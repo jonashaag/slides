@@ -25,6 +25,8 @@ var KEYS = {
   B: 66,
   J: 74,
   K: 75,
+  G: 71,
+  P: 80,
   ARROW_RIGHT: 39,
   ARROW_LEFT: 37
 }
@@ -32,7 +34,8 @@ var KEYS = {
 var config = {
   keys: {
     next: [KEYS.SPACE, KEYS.RETURN, KEYS.N, KEYS.K, KEYS.ARROW_LEFT],
-    previous: [KEYS.B, KEYS.J, KEYS.ARROW_RIGHT]
+    previous: [KEYS.B, KEYS.J, KEYS.P, KEYS.ARROW_RIGHT],
+    first: [KEYS.G]
   }
 }
 
@@ -84,7 +87,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  var firstSlide = function() {
+    if(slides.hasPrevious()) {
+      previousSlide();
+      setTimeout(firstSlide, 200);
+    }
+  }
+
   document.addEventListener('keyup', function(event) {
+    if(config.keys.first.contains(event.keyCode)) {
+      firstSlide();
+      return;
+    }
     if(config.keys.next.contains(event.keyCode)) {
       nextSlide();
     } else if(config.keys.previous.contains(event.keyCode)) {
