@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  setTimeout(function() {
   document.addEventListener('keyup', function(event) {
     if(config.keys.first.contains(event.keyCode)) {
       firstSlide();
@@ -110,5 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
       slideNumbers.forEach(function(elem) { elem.innerHTML = slides.current })
     }, slides.current == 1 ? 0 : 300);
-  });
+    return false;
+  })}, 50);
 });
