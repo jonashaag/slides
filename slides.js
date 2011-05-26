@@ -139,9 +139,9 @@ document.addEventListener('DOMContentLoaded', function() {
       slideNumbers.forEach(function(elem) { elem.innerHTML = slides.current })
     }, slides.current == 1 ? 0 : 300);
     return false;
-  })}, 50);
+  }, false)}, 50);
 
   var slide_no = window.location.toString().match(/#(\d+)/)[1];
   if(slide_no)
     slideTo(slide_no, /* no animation */ true);
-});
+}, false);
