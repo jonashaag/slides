@@ -11,13 +11,10 @@ section {
   display: none;
 }
 
-.current, .previous, .next {
+.current, .previous, .next, .animated {
   display: block;
-  transition-duration: 1s;
-  -webkit-transition-duration: 1s;
-  -moz-transition-duration: 1s;
-  -o-transition-duration: 1s;
-  -webkit-transition-timing-function: ease;
+  -webkit-transition: 1s ease;
+  -moz-transition: 1s ease;
 }
 
 .current  { left: 0; }
@@ -26,7 +23,7 @@ section {
 
 
 section { line-height: 1.4; }
-section > * { margin-left: 50px; margin-right: 50px; }
+section > * { margin-left: 15%; margin-right: 15%; }
 
 section > ul { font-size: 150%; padding-left: 1em; }
 section > ul > li { margin-bottom: 10px; }
