@@ -1,5 +1,15 @@
 Object.prototype.toArray = function() { return Array.prototype.slice.call(this) };
 Object.prototype.toInt   = function() { return parseInt(this) }
+Function.prototype.partial = function() {
+  var func = this;
+  var args1 = arguments;
+  return function() {
+    return func.apply(
+      func,
+      args1.toArray().concat(arguments.toArray())
+    );
+  }
+}
 Array.prototype.contains = function(what) {
   for(i=0; i<this.length; i++) {
     if(this[i] == what)
@@ -67,6 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
       var next_next = slides[slides.current+1];
       if(next_next)
         next_next.addClass('next');
+
+      update_location();
     }
   };
 
@@ -84,27 +96,42 @@ document.addEventListener('DOMContentLoaded', function() {
       var previous_previous = slides[slides.current-1];
       if(previous_previous)
         previous_previous.addClass('previous');
+
+      update_location();
     }
   }
 
-  var firstSlide = function() {
-    if(slides.hasPrevious()) {
+  var slideTo = function(n, noanimate) {
+    if(slides.current == n)
+      return;
+    if(slides.current < n)
+      nextSlide();
+    else
       previousSlide();
-      setTimeout(firstSlide, 200);
-    }
+    if(noanimate)
+      slideTo(n, noanimate);
+    else
+      setTimeout(slideTo.partial(n), 200);
+  }
+
+  var firstSlide = slideTo.partial(0);
+
+  var update_location = function() {
+    var n = slides.current;
+    history.replaceState(1, 'Slide ' + n, '#' + n);
   }
 
   setTimeout(function() {
   document.addEventListener('keyup', function(event) {
     if(config.keys.first.contains(event.keyCode)) {
       firstSlide();
-      return;
+      return false;
     }
     if(config.keys.next.contains(event.keyCode)) {
       nextSlide();
     } else if(config.keys.previous.contains(event.keyCode)) {
       previousSlide();
-      if(!slides.hasPrevious()) return;
+      if(!slides.hasPrevious()) return false;
     } else {
       return;
     }
@@ -113,4 +140,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }, slides.current == 1 ? 0 : 300);
     return false;
   })}, 50);
+
+  var slide_no = window.location.toString().match(/#(\d+)/)[1];
+  if(slide_no)
+    slideTo(slide_no, /* no animation */ true);
 });
