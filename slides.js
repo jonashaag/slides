@@ -122,15 +122,18 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   setTimeout(function() {
-  document.addEventListener('keyup', function(event) {
+  document.addEventListener('keydown', function(event) {
     if(config.keys.first.contains(event.keyCode)) {
       firstSlide();
+      event.preventDefault();
       return false;
     }
     if(config.keys.next.contains(event.keyCode)) {
+      event.preventDefault();
       nextSlide();
     } else if(config.keys.previous.contains(event.keyCode)) {
       previousSlide();
+      event.preventDefault();
       if(!slides.hasPrevious()) return false;
     } else {
       return;
@@ -139,7 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
       slideNumbers.forEach(function(elem) { elem.innerHTML = slides.current })
     }, slides.current == 1 ? 0 : 300);
     return false;
-  }, false)}, 50);
+
+  }, true)}, 50);
 
   var slide_no = window.location.toString().match(/#(\d+)/)[1];
   if(slide_no)
