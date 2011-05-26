@@ -43,9 +43,11 @@ var KEYS = {
 
 var config = {
   keys: {
-    next: [KEYS.SPACE, KEYS.RETURN, KEYS.N, KEYS.K, KEYS.ARROW_LEFT],
-    previous: [KEYS.B, KEYS.J, KEYS.P, KEYS.ARROW_RIGHT],
-    first: [KEYS.G]
+    nextSlide: [KEYS.SPACE, KEYS.RETURN, KEYS.K, KEYS.ARROW_LEFT],
+    previousSlide: [KEYS.P, KEYS.J, KEYS.ARROW_RIGHT],
+    firstSlide: [KEYS.G],
+    nextStep: [KEYS.N],
+    previousStep: [KEYS.B]
   }
 }
 
@@ -60,12 +62,46 @@ document.addEventListener('DOMContentLoaded', function() {
   slides[0].addClass('current');
   slides[1].addClass('next');
 
+  slides.forEach(function(slide) {
+    slide.steps = 0;
+    slide.currentStep = 1;
+    slide.hasNextStep = function() { return this.currentStep < this.steps }
+    slide.hasPreviousStep = function() { return this.currentStep }
+    var classNames = slide.className.split(' ');
+    for(var i=0; i<classNames.length; i++) {
+      var name = classNames[i];
+      var res = name.match(/(\d)+steps/);
+      if(res) {
+        slide.steps = res[1];
+        break;
+      }
+    }
+  });
+
   document.getElementsByClassName('slide-count').toArray()
     .forEach(function(elem) { elem.innerHTML = slides.length-1 });
 
+  var nextStep = function() {
+    var current = slides[slides.current];
+    if(current.hasNextStep()) {
+      current.removeClass('step'+ current.currentStep);
+      current.currentStep++;
+      current.addClass('step'+current.currentStep);
+    }
+  }
+
+  var previousStep = function() {
+    var current = slides[slides.current];
+    if(current.hasPreviousStep()) {
+      current.removeClass('step'+ current.currentStep);
+      current.currentStep--;
+      current.addClass('step'+current.currentStep);
+    }
+  }
+
   var nextSlide = function() {
+    var current = slides[slides.current];
     if(slides.hasNext()) {
-      var current = slides[slides.current];
       current.removeClass('current');
       current.addClass('previous');
 
@@ -83,8 +119,8 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   var previousSlide = function() {
+    var current = slides[slides.current];
     if(slides.hasPrevious()) {
-      var current = slides[slides.current];
       current.removeClass('current');
       current.addClass('next');
 
@@ -123,29 +159,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
   setTimeout(function() {
   document.addEventListener('keydown', function(event) {
-    if(config.keys.first.contains(event.keyCode)) {
-      firstSlide();
+      var what;
+      for(var k in config.keys) {
+        if(!config.keys.hasOwnProperty(k)) return;
+        if(config.keys[k].contains(event.keyCode)) {
+          what = k;
+          break;
+        }
+      }
+      if(!what)
+        return;
       event.preventDefault();
+      eval(what+'()');
+      if(slides.hasPrevious()) {
+        setTimeout(function() {
+          slideNumbers.forEach(function(elem) { elem.innerHTML = slides.current })
+        }, slides.current == 1 ? 0 : 300);
+      }
       return false;
-    }
-    if(config.keys.next.contains(event.keyCode)) {
-      event.preventDefault();
-      nextSlide();
-    } else if(config.keys.previous.contains(event.keyCode)) {
-      previousSlide();
-      event.preventDefault();
-      if(!slides.hasPrevious()) return false;
-    } else {
-      return;
-    }
-    setTimeout(function() {
-      slideNumbers.forEach(function(elem) { elem.innerHTML = slides.current })
-    }, slides.current == 1 ? 0 : 300);
-    return false;
-
   }, true)}, 50);
 
-  var slide_no = window.location.toString().match(/#(\d+)/)[1];
+  var slide_no = window.location.toString().match(/#(\d+)/);
   if(slide_no)
-    slideTo(slide_no, /* no animation */ true);
+    slideTo(slide_no[1], /* no animation */ true);
 }, false);
