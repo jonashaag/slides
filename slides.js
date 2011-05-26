@@ -43,7 +43,8 @@ var KEYS = {
 
 var config = {
   keys: {
-    nextSlide: [KEYS.SPACE, KEYS.RETURN, KEYS.K, KEYS.ARROW_LEFT],
+    nextAny: [KEYS.SPACE, KEYS.RETURN],
+    nextSlide: [KEYS.K, KEYS.ARROW_LEFT],
     previousSlide: [KEYS.P, KEYS.J, KEYS.ARROW_RIGHT],
     firstSlide: [KEYS.G],
     nextStep: [KEYS.N],
@@ -154,6 +155,13 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   var firstSlide = slideTo.partial(0);
+
+  var nextAny = function() {
+    if(slides[slides.current].hasNextStep())
+      nextStep();
+    else
+      nextSlide();
+  }
 
   var update_location = function() {
     var n = slides.current;
