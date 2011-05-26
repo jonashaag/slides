@@ -64,9 +64,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   slides.forEach(function(slide) {
     slide.steps = 0;
-    slide.currentStep = 1;
+    slide.currentStep = 0;
     slide.hasNextStep = function() { return this.currentStep < this.steps }
-    slide.hasPreviousStep = function() { return this.currentStep }
+    slide.hasPreviousStep = function() { return this.currentStep-1 > 0 }
     var classNames = slide.className.split(' ');
     for(var i=0; i<classNames.length; i++) {
       var name = classNames[i];
@@ -96,6 +96,9 @@ document.addEventListener('DOMContentLoaded', function() {
       current.removeClass('step'+ current.currentStep);
       current.currentStep--;
       current.addClass('step'+current.currentStep);
+    } else {
+      current.removeClass('step1');
+      current.currentStep = 0;
     }
   }
 
