@@ -1,15 +1,5 @@
 Object.prototype.toArray = function() { return Array.prototype.slice.call(this) };
 Object.prototype.toInt   = function() { return parseInt(this) }
-Function.prototype.partial = function() {
-  var func = this;
-  var args1 = arguments;
-  return function() {
-    return func.apply(
-      func,
-      args1.toArray().concat(arguments.toArray())
-    );
-  }
-}
 Array.prototype.contains = function(what) {
   for(i=0; i<this.length; i++) {
     if(this[i] == what)
@@ -42,6 +32,7 @@ var KEYS = {
 }
 
 var config = {
+  animateToFirst: true,
   keys: {
     nextAny: [KEYS.SPACE, KEYS.RETURN],
     nextSlide: [KEYS.K, KEYS.ARROW_LEFT],
@@ -151,10 +142,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if(noanimate)
       slideTo(n, noanimate);
     else
-      setTimeout(slideTo.partial(n), 200);
+      setTimeout(function() { slideTo(n) }, 200);
   }
 
-  var firstSlide = slideTo.partial(0);
+  var firstSlide = function() { slideTo(0, !config.animateToFirst) }
 
   var nextAny = function() {
     if(slides[slides.current].hasNextStep())
