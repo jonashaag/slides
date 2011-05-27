@@ -11,8 +11,8 @@ section {
   display: none;
 }
 
+.current, .previous, .next { display: block; }
 .current, .previous, .next, .animated {
-  display: block;
   -webkit-transition: 1s ease;
   -moz-transition: 1s ease;
 }
