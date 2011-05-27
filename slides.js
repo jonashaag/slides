@@ -18,6 +18,10 @@ Element.prototype.removeClass = function(name) {
   this.className = this.className.split(' ').cull(name).join(' ');
 }
 
+MOUSE = {
+  LEFT: 0,
+  WHEEL: 1
+}
 var KEYS = {
   SPACE: 32,
   RETURN: 13,
@@ -34,9 +38,9 @@ var KEYS = {
 var config = {
   animateToFirst: true,
   keys: {
-    nextAny: [KEYS.SPACE, KEYS.RETURN],
+    nextAny: [KEYS.SPACE, KEYS.RETURN, MOUSE.LEFT],
     nextSlide: [KEYS.K, KEYS.ARROW_LEFT],
-    previousSlide: [KEYS.P, KEYS.J, KEYS.ARROW_RIGHT],
+    previousSlide: [KEYS.P, KEYS.J, KEYS.ARROW_RIGHT, MOUSE.WHEEL],
     firstSlide: [KEYS.G],
     nextStep: [KEYS.N],
     previousStep: [KEYS.B]
@@ -165,22 +169,27 @@ document.addEventListener('DOMContentLoaded', function() {
     if(config.onSlideChange) config.onSlideChange(slides);
   }
 
-  setTimeout(function() {
-  document.addEventListener('keydown', function(event) {
-      var what;
-      for(var k in config.keys) {
-        if(!config.keys.hasOwnProperty(k)) return;
-        if(config.keys[k].contains(event.keyCode)) {
-          what = k;
-          break;
-        }
+  var event_cb = function(event) {
+    var what;
+    var key = event.button !== undefined ? event.button : event.keyCode;
+    for(var k in config.keys) {
+      if(!config.keys.hasOwnProperty(k)) return;
+      if(config.keys[k].contains(key)) {
+        what = k;
+        break;
       }
-      if(!what)
-        return;
-      event.preventDefault();
-      eval(what+'()');
-      return false;
-  }, true)}, 50);
+    }
+    if(!what)
+      return;
+    event.preventDefault();
+    eval(what+'()');
+    return false;
+  }
+
+  setTimeout(function() {
+    document.addEventListener('keydown', event_cb, true);
+    document.addEventListener('mousedown', event_cb, true);
+  }, 50);
 
   var slide_no = window.location.toString().match(/#(\d+)/);
   if(slide_no)
