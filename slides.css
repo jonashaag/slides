@@ -57,5 +57,5 @@ footer { bottom: 0; }
 .floatright { float: right; }
 
 /* First slide */
-section#welcome { z-index: 2; background-color: white; }
-section#welcome h1 { font-size: 40pt; padding-top: 2em; }
+section#welcome, section#bye { z-index: 1; background-color: white; }
+section#welcome, section#bye h1 { font-size: 40pt; padding-top: 2em; }
