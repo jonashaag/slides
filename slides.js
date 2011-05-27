@@ -131,8 +131,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   var slideTo = function(n, noanimate) {
-    if(slides.current == n)
+    if(slides.current == n) {
+      update_location();
       return;
+    }
     if(slides.current < n)
       nextSlide();
     else
@@ -155,6 +157,12 @@ document.addEventListener('DOMContentLoaded', function() {
   var update_location = function() {
     var n = slides.current;
     history.replaceState(1, 'Slide ' + n, '#' + n);
+    if(slides.hasPrevious()) {
+      setTimeout(function() {
+        slideNumbers.forEach(function(elem) { elem.innerHTML = slides.current })
+      }, slides.current == 1 ? 0 : 300);
+    }
+    if(config.onSlideChange) config.onSlideChange(slides);
   }
 
   setTimeout(function() {
@@ -171,11 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       event.preventDefault();
       eval(what+'()');
-      if(slides.hasPrevious()) {
-        setTimeout(function() {
-          slideNumbers.forEach(function(elem) { elem.innerHTML = slides.current })
-        }, slides.current == 1 ? 0 : 300);
-      }
       return false;
   }, true)}, 50);
 
