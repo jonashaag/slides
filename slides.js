@@ -1,3 +1,6 @@
+
+/* Unterhose wechseln! */
+
 Object.prototype.toArray = function() { return Array.prototype.slice.call(this) };
 Object.prototype.toInt   = function() { return parseInt(this) }
 Array.prototype.contains = function(what) {
