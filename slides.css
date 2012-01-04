@@ -58,4 +58,4 @@ footer { bottom: 0; }
 
 /* First slide */
 section#welcome, section#bye { z-index: 1; background-color: white; }
-section#welcome, section#bye h1 { font-size: 40pt; padding-top: 2em; }
+section#welcome h1, section#bye h1 { font-size: 40pt; padding-top: 2em; }
