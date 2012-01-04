@@ -44,6 +44,23 @@ h1 {
   font-weight: normal;
 }
 
+/* change the blockquote tag to something beautiful 
+ * I really dislike the colors, but this is kind of personal taste
+ * */
+blockquote {
+  border: 2px solid #000033;
+  background: #CCFFCC;
+  border-radius: 12px;
+  width: 90%;
+  margin: 15px;
+  padding: 5px;
+  quotes: "\201C" "\201D";
+  text-align: center;
+}
+/* some quote-open and -close for the blockquote tag*/
+blockquote:before { content: open-quote; font-weight: bold; }
+blockquote:after { content: close-quote; font-weight: bold; }
+
 header, footer {
   position: absolute;
   width: 100%;
