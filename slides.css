@@ -49,6 +49,7 @@ h1 {
  * */
 blockquote {
   border: 2px solid #000033;
+  border-style: groove;
   background: #CCFFCC;
   border-radius: 12px;
   width: 90%;
